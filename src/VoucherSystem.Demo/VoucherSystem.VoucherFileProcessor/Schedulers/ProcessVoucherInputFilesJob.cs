@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VoucherSystem.Demo.ApplicationServices.WorkerServices.Abstraction;
-using VoucherSystem.Demo.Models;
+using VoucherSystem.VoucherFileProcessor.ApplicationServices.WorkerServices.Abstraction;
+using VoucherSystem.VoucherFileProcessor.Models;
 
-namespace VoucherSystem.Demo.Schedulers
+namespace VoucherSystem.VoucherFileProcessor.Schedulers
 {
     [DisallowConcurrentExecution]
     public class ProcessVoucherInputFilesJob : IJob

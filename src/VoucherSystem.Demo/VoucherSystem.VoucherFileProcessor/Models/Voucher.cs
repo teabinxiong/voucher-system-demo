@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VoucherSystem.Demo.Models
+namespace VoucherSystem.VoucherFileProcessor.Models
 {
     public sealed class Voucher
     {

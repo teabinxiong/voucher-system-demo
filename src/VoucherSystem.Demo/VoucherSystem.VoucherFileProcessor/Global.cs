@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VoucherSystem.Demo
+namespace VoucherSystem.VoucherFileProcessor
 {
     public class Global
     {

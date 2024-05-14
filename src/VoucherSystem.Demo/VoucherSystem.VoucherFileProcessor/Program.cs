@@ -2,9 +2,9 @@
 using Quartz;
 using Serilog;
 using System.Runtime.ConstrainedExecution;
-using VoucherSystem.Demo;
-using VoucherSystem.Demo.ApplicationServices;
-using VoucherSystem.Demo.Schedulers;
+using VoucherSystem.VoucherFileProcessor;
+using VoucherSystem.VoucherFileProcessor.ApplicationServices;
+using VoucherSystem.VoucherFileProcessor.Schedulers;
 
 var builder = new HostBuilder()
          .ConfigureAppConfiguration((hostingContext, config) =>
@@ -19,7 +19,7 @@ var builder = new HostBuilder()
          })
         .ConfigureServices(s =>
         {
-            s.AddSingleton<VoucherSystem.Demo.ApplicationServices.BackgroundService>();
+            s.AddSingleton<VoucherSystem.VoucherFileProcessor.ApplicationServices.BackgroundService>();
             s.AddSingleton<ServicesManager>();
             s.AddQuartz(configure =>
             {
@@ -53,7 +53,7 @@ using (IHost host = builder.Build())
     Global.Logger = Log.Logger;
     Global.Logger.Information("Start....");
 
-    var svc = host.Services.GetRequiredService<VoucherSystem.Demo.ApplicationServices.BackgroundService>();
+    var svc = host.Services.GetRequiredService<VoucherSystem.VoucherFileProcessor.ApplicationServices.BackgroundService>();
 
     host.Start();
     svc.Start();

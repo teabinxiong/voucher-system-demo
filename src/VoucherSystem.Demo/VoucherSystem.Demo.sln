@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoucherSystem.Demo", "VoucherSystem.Demo\VoucherSystem.Demo.csproj", "{855506F7-09BD-45CC-8B8C-E365BEE76F3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoucherSystem.VoucherFileProcessor", "VoucherSystem.VoucherFileProcessor\VoucherSystem.VoucherFileProcessor.csproj", "{855506F7-09BD-45CC-8B8C-E365BEE76F3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

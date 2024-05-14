@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VoucherSystem.Demo.ApplicationServices.WorkerServices.Abstraction
+namespace VoucherSystem.VoucherFileProcessor.ApplicationServices.WorkerServices.Abstraction
 {
     public abstract class WorkerProcess
     {
