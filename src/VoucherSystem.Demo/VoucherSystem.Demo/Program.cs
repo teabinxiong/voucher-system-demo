@@ -1,8 +1,10 @@
 
+using Quartz;
 using Serilog;
 using System.Runtime.ConstrainedExecution;
 using VoucherSystem.Demo;
 using VoucherSystem.Demo.ApplicationServices;
+using VoucherSystem.Demo.Schedulers;
 
 var builder = new HostBuilder()
          .ConfigureAppConfiguration((hostingContext, config) =>
@@ -19,6 +21,23 @@ var builder = new HostBuilder()
         {
             s.AddSingleton<VoucherSystem.Demo.ApplicationServices.BackgroundService>();
             s.AddSingleton<ServicesManager>();
+            s.AddQuartz(configure =>
+            {
+                var jobKey = new JobKey(nameof(ProcessVoucherInputFilesJob));
+
+                configure
+                    .AddJob<ProcessVoucherInputFilesJob>(jobKey)
+                    .AddTrigger(
+                        trigger => trigger.ForJob(jobKey).WithCronSchedule("0 7 * * * ? *"));
+
+
+                configure.UseMicrosoftDependencyInjectionJobFactory();
+            });
+
+            s.AddQuartzHostedService(options =>
+            {
+                options.WaitForJobsToComplete = true;
+            });
         })
          .UseSerilog();
 
