@@ -27,7 +27,11 @@ namespace VoucherSystem.VoucherFileProcessor.Schedulers
             DateTime today = DateTime.Now;
             var todayStr = today.ToString("dd-MM-yyyy");
             var targetFile = $"{todayStr}.csv";
-            var voucherList = new List<Voucher>();
+
+
+            //var voucherList = new List<Voucher>();
+
+            var voucherDictionaryList = new Dictionary<string, List<Voucher>>();
             var voucherDirectory = _config.GetSection("VoucherFolder").Value;
             var filePath = voucherDirectory + @"/" + targetFile;
             Global.Logger.Information($"File is {filePath}");
@@ -49,7 +53,16 @@ namespace VoucherSystem.VoucherFileProcessor.Schedulers
                     voucher.BatchId = int.Parse(columns[1]);
                     voucher.Code = columns[2];
                     voucher.VoucherId = Guid.Parse(columns[3]);
-                    voucherList.Add(voucher);
+                    //voucherList.Add(voucher);
+
+                    if (!voucherDictionaryList.ContainsKey($"{voucher.CampaignId}")){
+                        voucherDictionaryList[voucher.CampaignId.ToString()] = new List<Voucher>() { voucher };
+                    } else
+                    {
+                        voucherDictionaryList[voucher.CampaignId.ToString()].Add(voucher);
+
+                    }
+
                 }
             }else
             {
@@ -59,23 +72,18 @@ namespace VoucherSystem.VoucherFileProcessor.Schedulers
             // insert into redis
             Global.Logger.Information("voucher generated");
 
-             List<string> voucherCodes = new List<string>();
-            foreach(var voucher in voucherList)
+             
+            foreach(var keyValuePair in voucherDictionaryList)
             {
-                Global.Logger.Information($"voucher={voucher.ToString()}");
-                voucherCodes.Add(voucher.ToString());
+                List<string> voucherCodes = new List<string>();
+                foreach (var voucher in keyValuePair.Value)
+                {
+                    Global.Logger.Information($"voucher={voucher.ToString()}");
+                    voucherCodes.Add(voucher.ToString());
+                }
 
-
+                await _redisService.InsertValuesIntoSetAsync(keyValuePair.Key, voucherCodes);
             }
-
-            await _redisService.InsertValuesIntoSetAsync("1",voucherCodes);
-            var values = await _redisService.GetAllValuesFromSetAsync("1");
-
-            foreach(var v in values)
-            {
-                Global.Logger.Information(v);
-            }
-
         }
 
     }
