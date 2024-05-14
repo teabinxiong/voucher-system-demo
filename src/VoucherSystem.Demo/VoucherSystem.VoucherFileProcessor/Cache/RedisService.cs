@@ -16,6 +16,12 @@ namespace VoucherSystem.VoucherFileProcessor.Cache
             _redisDb = redisDb;
         }
 
+        public async Task<string> GetRandomValueFromSetAsync(string key)
+        {
+            var randomValue = await _redisDb.SetPopAsync(key);
+            return randomValue.HasValue ? (string)randomValue : null;
+        }
+
         public async Task InsertValuesIntoSetAsync(string key, IEnumerable<string> values)
         {
             foreach (var value in values)

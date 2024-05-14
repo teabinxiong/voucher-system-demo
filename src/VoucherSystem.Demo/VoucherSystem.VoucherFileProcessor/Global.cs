@@ -11,5 +11,7 @@ namespace VoucherSystem.VoucherFileProcessor
         public static Serilog.ILogger Logger;
 
         public static List<ManualResetEvent> ThreadCompleteEvents = new List<ManualResetEvent>();
+
+        public static int MaxThread = 2;
     }
 }

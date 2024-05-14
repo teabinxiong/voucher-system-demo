@@ -8,6 +8,7 @@ namespace VoucherSystem.VoucherFileProcessor.Cache
 {
     public interface IRedisService
     {
+        Task<string> GetRandomValueFromSetAsync(string key);
         Task InsertValuesIntoSetAsync(string key, IEnumerable<string> values);
         Task<IEnumerable<string>> GetAllValuesFromSetAsync(string key);
     }
