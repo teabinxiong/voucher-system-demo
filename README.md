@@ -5,7 +5,7 @@ Voucher System written in .NET Core, Redis, and Quatz.NET scheduler library, dem
 Tea Bin Xiong
 
 ## Architecture Diagram
-![image](./img/voucher-system.PNG)
+![image](./voucher-system.png)
 
 
 ## Explanations
