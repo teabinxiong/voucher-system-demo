@@ -6,6 +6,10 @@
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "DockerfileRunArguments": "--network voucher_sys_network"
     }
   }
 }

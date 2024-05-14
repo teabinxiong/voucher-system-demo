@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using VoucherSystem.VoucherFileProcessor.ApplicationServices.WorkerServices.Abstraction;
+using VoucherSystem.VoucherFileProcessor.Cache;
 using VoucherSystem.VoucherFileProcessor.Models;
 
 namespace VoucherSystem.VoucherFileProcessor.Schedulers
@@ -13,9 +15,11 @@ namespace VoucherSystem.VoucherFileProcessor.Schedulers
     public class ProcessVoucherInputFilesJob : IJob
     {
         private readonly IConfiguration _config;
-        public ProcessVoucherInputFilesJob(IConfiguration config)
+        private readonly IRedisService _redisService;
+        public ProcessVoucherInputFilesJob(IConfiguration config, IRedisService redisService)
         {
             _config = config;
+            _redisService = redisService;
         }
         public async Task Execute(IJobExecutionContext context)
         {
@@ -55,9 +59,21 @@ namespace VoucherSystem.VoucherFileProcessor.Schedulers
             // insert into redis
             Global.Logger.Information("voucher generated");
 
+             List<string> voucherCodes = new List<string>();
             foreach(var voucher in voucherList)
             {
                 Global.Logger.Information($"voucher={voucher.ToString()}");
+                voucherCodes.Add(voucher.ToString());
+
+
+            }
+
+            await _redisService.InsertValuesIntoSetAsync("1",voucherCodes);
+            var values = await _redisService.GetAllValuesFromSetAsync("1");
+
+            foreach(var v in values)
+            {
+                Global.Logger.Information(v);
             }
 
         }

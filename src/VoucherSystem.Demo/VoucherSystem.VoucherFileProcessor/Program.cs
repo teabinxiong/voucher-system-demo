@@ -1,9 +1,11 @@
 
 using Quartz;
 using Serilog;
+using StackExchange.Redis;
 using System.Runtime.ConstrainedExecution;
 using VoucherSystem.VoucherFileProcessor;
 using VoucherSystem.VoucherFileProcessor.ApplicationServices;
+using VoucherSystem.VoucherFileProcessor.Cache;
 using VoucherSystem.VoucherFileProcessor.Schedulers;
 
 var builder = new HostBuilder()
@@ -24,7 +26,22 @@ var builder = new HostBuilder()
 
             s.AddSingleton<VoucherSystem.VoucherFileProcessor.ApplicationServices.BackgroundService>();
             s.AddSingleton<ServicesManager>();
-         
+
+            s.AddSingleton<IConnectionMultiplexer>(provider =>
+            {
+                var connectionString = configuration.GetConnectionString("Redis");
+                return ConnectionMultiplexer.Connect(connectionString);
+            });
+
+            s.AddScoped<IDatabase>(provider =>
+            {
+                var redis = provider.GetRequiredService<IConnectionMultiplexer>();
+                return redis.GetDatabase();
+            });
+
+            s.AddScoped<IRedisService, RedisService>();
+
+
             s.AddQuartz(configure =>
             {
                 var jobKey = new JobKey(nameof(ProcessVoucherInputFilesJob));

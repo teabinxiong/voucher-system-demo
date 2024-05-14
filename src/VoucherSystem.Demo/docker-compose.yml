@@ -8,3 +8,21 @@ services:
       dockerfile: VoucherSystem.VoucherFileProcessor/Dockerfile
     volumes:
         - ./VoucherSystem.VoucherFileProcessor/Vouchers:/app/storage
+    links:
+        - redis_service
+    depends_on:
+        - redis_service
+    networks:
+        - voucher_sys_network
+
+  redis_service:
+    image: redis
+    container_name: cache
+    networks: 
+      - voucher_sys_network
+    ports:
+      - "6379:6379"
+networks:
+  voucher_sys_network:
+    driver: 
+      bridge
