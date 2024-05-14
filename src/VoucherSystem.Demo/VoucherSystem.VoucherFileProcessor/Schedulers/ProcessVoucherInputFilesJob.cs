@@ -25,7 +25,7 @@ namespace VoucherSystem.VoucherFileProcessor.Schedulers
             var targetFile = $"{todayStr}.csv";
             var voucherList = new List<Voucher>();
             var voucherDirectory = _config.GetSection("VoucherFolder").Value;
-            var filePath = voucherDirectory + @"\" + targetFile;
+            var filePath = voucherDirectory + @"/" + targetFile;
             Global.Logger.Information($"File is {filePath}");
             // Check if there is any files exist
             var isFileExist = File.Exists(filePath);

@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  vouchersystem.voucherfileprocessor:
+    image: ${DOCKER_REGISTRY-}vouchersystemvoucherfileprocessor
+    build:
+      context: .
+      dockerfile: VoucherSystem.VoucherFileProcessor/Dockerfile
+    volumes:
+        - ./VoucherSystem.VoucherFileProcessor/Vouchers:/app/storage

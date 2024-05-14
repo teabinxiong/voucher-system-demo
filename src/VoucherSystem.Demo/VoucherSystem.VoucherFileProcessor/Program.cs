@@ -17,10 +17,14 @@ var builder = new HostBuilder()
                  config.AddCommandLine(args);
              }
          })
-        .ConfigureServices(s =>
+        .ConfigureServices((hostContext, s) =>
         {
+            // Access IConfiguration within ConfigureServices scope
+            var configuration = hostContext.Configuration;
+
             s.AddSingleton<VoucherSystem.VoucherFileProcessor.ApplicationServices.BackgroundService>();
             s.AddSingleton<ServicesManager>();
+         
             s.AddQuartz(configure =>
             {
                 var jobKey = new JobKey(nameof(ProcessVoucherInputFilesJob));
@@ -28,7 +32,10 @@ var builder = new HostBuilder()
                 configure
                     .AddJob<ProcessVoucherInputFilesJob>(jobKey)
                     .AddTrigger(
-                        trigger => trigger.ForJob(jobKey).WithCronSchedule("0 7 * * * ? *"));
+                        trigger => trigger.ForJob(jobKey).WithCronSchedule(
+                            configuration.GetSection("SchedulerCronExpression").Value
+                            )
+                       );
 
 
                 configure.UseMicrosoftDependencyInjectionJobFactory();
